@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Glitcher</title>
+</head>
+<body>
+    <h1>Website Glitcher</h1>
+    <p>Enter a website URL:</p>
+    <input type="text" id="urlInput" placeholder="Enter URL">
+    <button onclick="fetchWebsite()">Glitch!</button>
+
+    <script>
+        function fetchWebsite() {
+            var url = document.getElementById("urlInput").value.trim();
+            if (!url) {
+                alert("Please enter a URL");
+                return;
+            }
+
+            // Check if the URL starts with "https://"
+            if (!url.startsWith("https://")) {
+                alert("Please enter a URL starting with 'https://'");
+                return;
+            }
+
+            // Construct the URL with the proxy
+            var proxyUrl = "https://uncors.vercel.app/?url=" + encodeURIComponent(url);
+
+            // Fetch the website content using the proxy
+            fetch(proxyUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Open a new window with the fetched code
+                    var newWindow = window.open("about:blank");
+                    newWindow.document.write(data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+    </script>
+</body>
+</html>
